@@ -46,6 +46,12 @@ source $SRC/lib/makeboarddeb.sh 			# Create board support package
 source $SRC/lib/general.sh				# General functions
 source $SRC/lib/chroot-buildpackages.sh			# Building packages in chroot
 
+# check if mandatory passphrase is provided if encryption is enabled, else abort
+if [[ ${CRYPTROOT_ENABLE^^} ==  YES && -z $CRYPTROOT_PASSPHRASE ]]; then
+	display_alert "Root encryption is enabled but passphrase is missing. Please configure a passphrase!" "CRYPTROOT_ENABLE; CRYPTROOT_PASSPHRASE" "err"
+	exit -1
+fi
+
 # compress and remove old logs
 mkdir -p $DEST/debug
 (cd $DEST/debug && tar -czf logs-$(<timestamp).tgz *.log) > /dev/null 2>&1
@@ -53,16 +59,6 @@ rm -f $DEST/debug/*.log > /dev/null 2>&1
 date +"%d_%m_%Y-%H_%M_%S" > $DEST/debug/timestamp
 # delete compressed logs older than 7 days
 (cd $DEST/debug && find . -name '*.tgz' -mtime +7 -delete) > /dev/null
-
-# Script parameters handling
-for i in "$@"; do
-	if [[ $i == *=* ]]; then
-		parameter=${i%%=*}
-		value=${i##*=}
-		display_alert "Command line: setting $parameter to" "${value:-(empty)}" "info"
-		eval $parameter=$value
-	fi
-done
 
 if [[ $PROGRESS_DISPLAY == none ]]; then
 	OUTPUT_VERYSILENT=yes
