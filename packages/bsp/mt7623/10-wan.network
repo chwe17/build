@@ -2,4 +2,4 @@
 Name=wan 
 
 [Network]
-Bridge=br0
+DHCP=yes

@@ -1,5 +1,3 @@
 [Match]
 Name=br0
 
-[Network]
-DHCP=yes
