@@ -153,6 +153,7 @@ install_common()
 	install_deb_chroot "$DEST/debs/${CHOSEN_KERNEL}_${REVISION}_${ARCH}.deb"
 	install_deb_chroot "$DEST/debs/${CHOSEN_UBOOT}_${REVISION}_${ARCH}.deb"
 
+
 	if [[ $BUILD_DESKTOP == yes ]]; then
 		install_deb_chroot "$DEST/debs/$RELEASE/armbian-${RELEASE}-desktop_${REVISION}_all.deb"
 		# install display manager
@@ -257,7 +258,7 @@ install_common()
 
 	# DNS fix. package resolvconf is not available everywhere
 	if [ -d /etc/resolvconf/resolv.conf.d ]; then
-		echo 'nameserver 1.1.1.1' > $SDCARD/etc/resolvconf/resolv.conf.d/head
+		echo "nameserver $NAMESERVER" > $SDCARD/etc/resolvconf/resolv.conf.d/head
 	fi
 
 	# premit root login via SSH for the first boot
@@ -359,7 +360,7 @@ install_distribution_specific()
 		  renderer: NetworkManager
 		EOF
 		# DNS fix
-		sed -i "s/#DNS=.*/DNS=1.1.1.1/g" $SDCARD/etc/systemd/resolved.conf
+		sed -i "s/#DNS=.*/DNS=$NAMESERVER/g" $SDCARD/etc/systemd/resolved.conf
 		# Journal service adjustements
 		sed -i "s/#Storage=.*/Storage=volatile/g" $SDCARD/etc/systemd/journald.conf
 		sed -i "s/#Compress=.*/Compress=yes/g" $SDCARD/etc/systemd/journald.conf
