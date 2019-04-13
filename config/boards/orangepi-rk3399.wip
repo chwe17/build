@@ -1,6 +1,6 @@
 # RK3399 hexa core 2G/4GB SoC GBe eMMC USB3 WiFi
 BOARD_NAME="OrangePiRK3399"
-BOARDFAMILY="rk3399"
+BOARDFAMILY="rockchip64"
 BOOTCONFIG="orangepi-rk3399_defconfig"
 #
 MODULES=""

@@ -1,29 +1,26 @@
 diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 244272a3..8da63ea9 100644
+index 909edcc5..6fcee7db 100644
 --- a/arch/arm64/boot/dts/rockchip/Makefile
 +++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -4,8 +4,8 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += \
- 	rk3399-nanopi4-rev00.dtb \
- 	rk3399-nanopi4-rev01.dtb \
- 	rk3399-nanopi4-rev04.dtb \
--	rk3399-nanopi4-rev06.dtb
--
-+	rk3399-nanopi4-rev06.dtb \
-+	rk3399-firefly.dtb
- else
- 
- dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-evb-ddr3-v10.dtb
+@@ -88,6 +88,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-fpga.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-gru-gru.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-gru-kevin-r0.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-gru-kevin-r1.dtb
++dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-firefly.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-mid-818-android-6.0.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-mid-818-android.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-pinebook-pro.dtb
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-firefly-linux.dts b/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
 similarity index 85%
 rename from arch/arm64/boot/dts/rockchip/rk3399-firefly-linux.dts
 rename to arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
-index c3e076f7..5e31d9df 100644
+index 82bb2a63..e74f5a85 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399-firefly-linux.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
-@@ -121,17 +121,6 @@
+@@ -121,16 +121,6 @@
  		};
  	};
-
+ 
 -	fiq_debugger: fiq-debugger {
 -		compatible = "rockchip,fiq-debugger";
 -		rockchip,serial-id = <2>;
@@ -34,14 +31,13 @@ index c3e076f7..5e31d9df 100644
 -		pinctrl-names = "default";
 -		pinctrl-0 = <&uart2c_xfer>;
 -	};
--
+ 
  	gpio-keys {
  		compatible = "gpio-keys";
- 		#address-cells = <1>;
-@@ -247,6 +236,17 @@
+@@ -247,6 +237,17 @@
  		regulator-name = "vcc3v3_pcie";
  	};
-
+ 
 +	vcc3v3_3g: vcc3v3-3g-regulator {
 +		compatible = "regulator-fixed";
 +		enable-active-high;
@@ -56,11 +52,10 @@ index c3e076f7..5e31d9df 100644
  	vcc3v3_sys: vcc3v3-sys {
  		compatible = "regulator-fixed";
  		regulator-name = "vcc3v3_sys";
-@@ -345,8 +345,113 @@
- 		BT,wake_host_irq = <&gpio0 4 GPIO_ACTIVE_HIGH>; /* GPIO0_A4 */
- 		status = "okay";
+@@ -354,6 +355,110 @@
  	};
-+
+ };
+ 
 +	leds {
 +		compatible = "gpio-leds";
 +		power {
@@ -80,8 +75,7 @@ index c3e076f7..5e31d9df 100644
 +			pinctrl-0 = <&led_user>;
 +		};
 +	};
- };
-
++
 +&cluster0_opp {
 +	opp-408000000 {
 +		opp-microvolt = <800000>;
@@ -166,11 +160,10 @@ index c3e076f7..5e31d9df 100644
 +	};
 +};
 +
-+
  &cpu_l0 {
  	cpu-supply = <&vdd_cpu_l>;
  };
-@@ -472,8 +577,10 @@
+@@ -479,8 +584,10 @@
  		reg = <0x1b>;
  		interrupt-parent = <&gpio1>;
  		interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
@@ -182,29 +175,26 @@ index c3e076f7..5e31d9df 100644
  		rockchip,system-power-controller;
  		wakeup-source;
  		#clock-cells = <1>;
-@@ -838,7 +945,17 @@
-
- 		vsel2_gpio: vsel2-gpio {
+@@ -847,6 +954,15 @@
  			rockchip,pins =
--			<1 14 RK_FUNC_GPIO &pcfg_pull_down>;
-+				<1 14 RK_FUNC_GPIO &pcfg_pull_down>;
-+		};
+ 			<1 14 RK_FUNC_GPIO &pcfg_pull_down>;
+ 		};
 +
 +		pmic_stby: pmic-stby {
 +			rockchip,pins =
 +				<1 24 RK_FUNC_GPIO &pcfg_pull_up>;
-+		};
-+
++		};+
 +		pmic_hold: pmic-hold{
 +			rockchip,pins =
 +				<1 13 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
+ 	};
+ 
+ 	sdio-pwrseq {
+@@ -863,6 +979,15 @@
  		};
  	};
-
-@@ -856,6 +973,15 @@
- 		};
- 	};
-
+ 
 +	leds {
 +		led_power: led-power {
 +			rockchip,pins = <2 27 RK_FUNC_GPIO &pcfg_pull_none>;
@@ -217,10 +207,10 @@ index c3e076f7..5e31d9df 100644
  	rt5640 {
  		rt5640_hpcon: rt5640-hpcon {
  			rockchip,pins = <4 21 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -912,6 +1038,29 @@
+@@ -919,6 +1044,29 @@
  	status = "disabled";
  };
-
+ 
 +&route_hdmi {
 +	status = "okay";
 +	logo,mode = "center";
@@ -242,15 +232,15 @@ index c3e076f7..5e31d9df 100644
 +
 +&hdmi_in_vopl {
 +	status = "disabled";
-+};
++}
 +
  &saradc {
  	status = "okay";
  	vref-supply = <&vccadc_ref>;
-@@ -1009,6 +1158,31 @@
+@@ -1016,6 +1164,31 @@
  	};
  };
-
+ 
 +&pwm3 {
 +	status = "okay";
 +	interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH 0>;
@@ -279,10 +269,10 @@ index c3e076f7..5e31d9df 100644
  &uart0 {
  	pinctrl-names = "default";
  	pinctrl-0 = <&uart0_xfer &uart0_cts>;
-@@ -1019,6 +1193,12 @@
+@@ -1026,6 +1199,12 @@
  	status = "okay";
  };
-
+ 
 +&uart4 {
 +	current-speed = <9600>;
 +	no-loopback-test;
