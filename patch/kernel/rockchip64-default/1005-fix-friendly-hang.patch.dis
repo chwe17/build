@@ -1,8 +1,8 @@
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4-common.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4-common.dtsi
-index c2918c3f..dcf79320 100644
+index ea71d784..912f9182 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4-common.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4-common.dtsi
-@@ -74,24 +74,6 @@
+@@ -74,23 +74,6 @@
  		spi1 = &spi1;
  	};
  
@@ -23,11 +23,10 @@ index c2918c3f..dcf79320 100644
 -		clock-output-names = "xin32k";
 -		#clock-cells = <0>;
 -	};
--
+ 
  	clkin_gmac: external-gmac-clock {
  		compatible = "fixed-clock";
- 		clock-frequency = <125000000>;
-@@ -526,16 +508,12 @@
+@@ -528,16 +511,12 @@
  	//allocator = <0>;
  };
  
@@ -45,7 +44,7 @@ index c2918c3f..dcf79320 100644
  	force-hpd;
  	/delete-property/ pinctrl-0;
  
-@@ -556,29 +534,22 @@
+@@ -558,29 +537,22 @@
  
  &route_edp {
  	status = "okay";
@@ -78,7 +77,7 @@ index c2918c3f..dcf79320 100644
  };
  
  &i2c0 {
-@@ -931,10 +902,16 @@
+@@ -933,10 +905,16 @@
  };
  
  &pcie0 {
@@ -96,7 +95,7 @@ index c2918c3f..dcf79320 100644
  };
  
  &pwm_bl {
-@@ -1118,14 +1095,6 @@
+@@ -1120,13 +1098,6 @@
  };
  
  &pinctrl {
@@ -107,7 +106,6 @@ index c2918c3f..dcf79320 100644
 -	hdmi {
 -		/delete-node/ hdmi-i2c-xfer;
 -	};
--
+ 
  	pmic {
  		pmic_int_l: pmic-int-l {
- 			rockchip,pins = <1 21 RK_FUNC_GPIO &pcfg_pull_up>;

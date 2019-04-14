@@ -1,8 +1,13 @@
 diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 909edcc5..6fcee7db 100644
+index 909edcc5..64b60f85 100644
 --- a/arch/arm64/boot/dts/rockchip/Makefile
 +++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -88,6 +88,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-fpga.dtb
+@@ -83,11 +83,11 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-evb-rev3-android-lp4.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-evb-rev3-android-mipi-edp.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-evb-rev3-cros.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-firefly-android.dtb
+-dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-firefly-linux.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-fpga.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-gru-gru.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-gru-kevin-r0.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-gru-kevin-r1.dtb
@@ -14,7 +19,7 @@ diff --git a/arch/arm64/boot/dts/rockchip/rk3399-firefly-linux.dts b/arch/arm64/
 similarity index 85%
 rename from arch/arm64/boot/dts/rockchip/rk3399-firefly-linux.dts
 rename to arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
-index 82bb2a63..e74f5a85 100644
+index 82bb2a63..92ddc052 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399-firefly-linux.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
 @@ -121,16 +121,6 @@
@@ -52,10 +57,11 @@ index 82bb2a63..e74f5a85 100644
  	vcc3v3_sys: vcc3v3-sys {
  		compatible = "regulator-fixed";
  		regulator-name = "vcc3v3_sys";
-@@ -354,6 +355,110 @@
+@@ -352,6 +353,110 @@
+ 		BT,wake_host_irq = <&gpio0 4 GPIO_ACTIVE_HIGH>; /* GPIO0_A4 */
+ 		status = "okay";
  	};
- };
- 
++
 +	leds {
 +		compatible = "gpio-leds";
 +		power {
@@ -75,6 +81,7 @@ index 82bb2a63..e74f5a85 100644
 +			pinctrl-0 = <&led_user>;
 +		};
 +	};
++};
 +
 +&cluster0_opp {
 +	opp-408000000 {
@@ -158,11 +165,9 @@ index 82bb2a63..e74f5a85 100644
 +		opp-microvolt-L3 = <1325000>;
 +		clock-latency-ns = <40000>;
 +	};
-+};
-+
- &cpu_l0 {
- 	cpu-supply = <&vdd_cpu_l>;
  };
+ 
+ &cpu_l0 {
 @@ -479,8 +584,10 @@
  		reg = <0x1b>;
  		interrupt-parent = <&gpio1>;
@@ -183,7 +188,7 @@ index 82bb2a63..e74f5a85 100644
 +		pmic_stby: pmic-stby {
 +			rockchip,pins =
 +				<1 24 RK_FUNC_GPIO &pcfg_pull_up>;
-+		};+
++		};
 +		pmic_hold: pmic-hold{
 +			rockchip,pins =
 +				<1 13 RK_FUNC_GPIO &pcfg_pull_up>;
@@ -191,10 +196,11 @@ index 82bb2a63..e74f5a85 100644
  	};
  
  	sdio-pwrseq {
-@@ -863,6 +979,15 @@
+@@ -893,6 +1009,16 @@
+ 			rockchip,pins = <1 2 RK_FUNC_GPIO &pcfg_pull_up>;
  		};
  	};
- 
++
 +	leds {
 +		led_power: led-power {
 +			rockchip,pins = <2 27 RK_FUNC_GPIO &pcfg_pull_none>;
@@ -204,10 +210,10 @@ index 82bb2a63..e74f5a85 100644
 +		};
 +	};
 +
- 	rt5640 {
- 		rt5640_hpcon: rt5640-hpcon {
- 			rockchip,pins = <4 21 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -919,6 +1044,29 @@
+ };
+ 
+ &pwm0 {
+@@ -919,6 +1045,29 @@
  	status = "disabled";
  };
  
@@ -232,12 +238,12 @@ index 82bb2a63..e74f5a85 100644
 +
 +&hdmi_in_vopl {
 +	status = "disabled";
-+}
++};
 +
  &saradc {
  	status = "okay";
  	vref-supply = <&vccadc_ref>;
-@@ -1016,6 +1164,31 @@
+@@ -1016,6 +1165,31 @@
  	};
  };
  
@@ -269,7 +275,7 @@ index 82bb2a63..e74f5a85 100644
  &uart0 {
  	pinctrl-names = "default";
  	pinctrl-0 = <&uart0_xfer &uart0_cts>;
-@@ -1026,6 +1199,12 @@
+@@ -1026,6 +1200,12 @@
  	status = "okay";
  };
  
@@ -282,3 +288,8 @@ index 82bb2a63..e74f5a85 100644
  &usbdrd3_0 {
  	status = "okay";
  	extcon = <&fusb0>;
+@@ -1088,3 +1268,4 @@
+ &vpu {
+ 	status = "okay";
+ };
++
